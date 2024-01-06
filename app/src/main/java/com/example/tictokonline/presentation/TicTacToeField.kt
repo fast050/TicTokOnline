@@ -24,7 +24,25 @@ fun TicTacToeField(
     playerOColor: Color = Color.Red,
     onTapInField: (x: Int, y: Int) -> Unit
 ) {
-    Canvas(modifier = modifier) {
+    Canvas(modifier = modifier
+        .pointerInput(true){
+            detectTapGestures {
+                val x = when{
+                    (0f..2f*size.width/6).contains(it.x) -> 0
+                    (2f*size.width/6..4f*size.width/6).contains(it.x) -> 1
+                    (4f*size.width/6..size.width.toFloat()).contains(it.x) -> 2
+                    else -> {return@detectTapGestures}
+                }
+                val y =  when{
+                (0f..2f*size.height/6).contains(it.x) -> 0
+                (2f*size.height/6..4f*size.height/6).contains(it.x) -> 1
+                (4f*size.height/6..size.height.toFloat()).contains(it.x) -> 2
+                else -> {return@detectTapGestures}
+            }
+
+                onTapInField(x , y)
+            }
+        }) {
         // draw the lines vertical and horizontal
         drawVerticalLine(size.width * 1 / 3)
         drawVerticalLine(size.width * 2 / 3)
@@ -150,8 +168,8 @@ fun PreviewTicTocToeField() {
         state = GameState(
             field = arrayOf(
                 arrayOf( 'O'  , 'X' , 'O'),
-                arrayOf( null , null , null),
-                arrayOf( null , null , null)
+                arrayOf( null , 'O' , null),
+                arrayOf( 'X' , null , 'X')
             )
         ),
         onTapInField = { x, y -> },
